@@ -1,7 +1,9 @@
 --[[
-    Library of Congress API Helper Module
+    Library of Congress API Helper Module.
     
     This module handles all API interactions with loc.gov.
+
+    Based on API code developed for FolkRAG: https://github.com/darkivist/FolkRAG/
 ]]
 
 local json = require("json")
