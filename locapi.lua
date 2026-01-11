@@ -1,7 +1,7 @@
 --[[
     Library of Congress API Helper Module
     
-    This module handles all API interactions with the LOC digital collection.
+    This module handles all API interactions with loc.gov.
 ]]
 
 local json = require("json")
@@ -104,7 +104,7 @@ function LocApi:fetchApiData(url, params, attempt_num)
     -- Parse JSON response
     local response_text = table.concat(response_body)
     
-    -- Log first 500 characters to see what we got
+    -- Log first 500 characters
     logger.dbg("LOC API: Response preview:", response_text:sub(1, 500))
     logger.dbg("LOC API: Response length:", #response_text)
     
@@ -122,7 +122,7 @@ function LocApi:fetchApiData(url, params, attempt_num)
         return nil
     end
     
-    -- Check for 404 status in JSON
+    -- Check for 404
     if data.status and data.status == 404 then
         logger.info("LOC API: Resource not found (404 in JSON)")
         return nil
@@ -241,8 +241,6 @@ function LocApi:extractFileData(item_record)
     logger.dbg("LOC API: Processing", #item_record.resources, "resources")
     
     for resource_num, resource in ipairs(item_record.resources) do
-        -- LOC resources.files is a NESTED ARRAY: files = [[ {...}, {...} ]]
-        -- So we need to iterate through the outer array first
         if resource.files then
             logger.dbg("LOC API: Resource has", #resource.files, "file arrays")
             for files_array_num, files_array in ipairs(resource.files) do

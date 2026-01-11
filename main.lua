@@ -21,7 +21,7 @@ local logger = require("logger")
 local _ = require("gettext")
 local T = require("ffi/util").template
 
--- Import our LOC API helper
+-- Import API helper
 local LocApi = require("locapi")
 
 local LOC = WidgetContainer:extend{
@@ -167,7 +167,7 @@ function LOC:loadSearchPage(search_url, page_num)
         timeout = 1,
     })
 
-    -- Load just one page at a time
+    -- Load one page at a time
     local results = self.api:retrieveSingleSearchPage(search_url, page_num)
     
     if results and #results > 0 then
@@ -180,7 +180,7 @@ function LOC:loadSearchPage(search_url, page_num)
     end
 end
 
--- Perform the search
+-- Perform search
 function LOC:performSearch(search_terms)
     if not NetworkMgr:isOnline() then
         NetworkMgr:promptWifiOn()
@@ -193,7 +193,7 @@ function LOC:performSearch(search_terms)
     self:loadSearchPage(search_url, 1)
 end
 
--- Show search results in a menu
+-- Show search results
 function LOC:showSearchResults(results, search_url, current_page)
     local items = {}
     
@@ -364,10 +364,9 @@ function LOC:showItemDetails(item)
     end
     
     -- Filter for EPUBs and PDFs
-    -- Note: LOC uses "application/epub" not "application/epub+zip"
     local supported_mimetypes = {
-        "application/epub",      -- LOC's actual EPUB mimetype
-        "application/epub+zip",  -- Standard EPUB mimetype (just in case)
+        "application/epub",
+        "application/epub+zip",
         "application/pdf",
     }
     
@@ -488,7 +487,7 @@ function LOC:downloadFile(url, title, format)
     socketutil:set_timeout(15, -1)  -- 15s block timeout, infinite total
     logger.info("LOC: Set timeout to 15s block, infinite total")
     
-    -- Make the HTTP request
+    -- Make HTTP request
     local request_params = {
         url = url,
         method = "GET",
