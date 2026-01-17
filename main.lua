@@ -224,9 +224,12 @@ function LOC:showSearchResults(results, search_url, current_page)
     local results_menu = Menu:new{
         title = T(_("LOC Results - Page %1"), current_page or 1),
         item_table = items,
+        parent = self.ui,
         is_borderless = true,
         is_popout = false,
         title_bar_fm_style = true,
+        show_captions = true,
+        multilines_show_more_text = true,
         onMenuSelect = function(item_menu, item)
             if item.callback then
                 item.callback()
@@ -237,6 +240,10 @@ function LOC:showSearchResults(results, search_url, current_page)
     -- Store reference so we can update it
     self.current_menu = results_menu
     UIManager:show(results_menu)
+    -- Force refresh
+    UIManager:nextTick(function()
+        UIManager:setDirty(results_menu, "ui")
+    end)
 end
 
 -- Load next page and append to existing results
@@ -288,9 +295,12 @@ function LOC:loadNextPage(search_url, page_num, existing_items)
     local results_menu = Menu:new{
         title = T(_("LOC Results - Page %1"), page_num),
         item_table = existing_items,
+        parent = self.ui,
         is_borderless = true,
         is_popout = false,
         title_bar_fm_style = true,
+        show_captions = true,
+        multilines_show_more_text = true,
         onMenuSelect = function(item_menu, item)
             if item.callback then
                 item.callback()
@@ -300,6 +310,10 @@ function LOC:loadNextPage(search_url, page_num, existing_items)
     
     self.current_menu = results_menu
     UIManager:show(results_menu)
+    -- Force refresh
+    UIManager:nextTick(function()
+        UIManager:setDirty(results_menu, "ui")
+    end)
 end
 
 -- Show details for a specific item
@@ -435,6 +449,10 @@ function LOC:showFileOptions(files, title)
     }
     
     UIManager:show(self.file_dialog)
+    -- Force refresh
+    UIManager:nextTick(function()
+        UIManager:setDirty(self.file_dialog, "ui")
+    end)
 end
 
 -- Download the file
