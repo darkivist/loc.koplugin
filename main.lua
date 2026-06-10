@@ -35,6 +35,16 @@ LOC.settings_file = DataStorage:getSettingsDir() .. "/loc.lua"
 function LOC:init()
     self.ui.menu:registerToMainMenu(self)
     self:onDispatcherRegisterActions()
+    -- Place plugin in the Tools menu tab instead of the default
+    local menu_id = "loc_search"
+    local menu_order = require("ui/elements/reader_menu_order")
+    if menu_order.tools then
+        table.insert(menu_order.tools, menu_id)
+    end
+    local fm_menu_order = require("ui/elements/filemanager_menu_order")
+    if fm_menu_order.tools then
+        table.insert(fm_menu_order.tools, menu_id)
+    end
     self.settings = LuaSettings:open(self.settings_file)
     self.download_dir = self.settings:readSetting("download_dir") or DataStorage:getFullDataDir() .. "/downloads"
     self.api = LocApi  -- Use the API helper
